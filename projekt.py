@@ -150,7 +150,13 @@ def show_frames( frame1, frame2, bbox1, bbox2):
 pics, bboxes = readfiles()
 r = len(bboxes)
 
-for i in range(1, r):
-    score, cost_matrix = calc_score(bboxes[i-1], bboxes[i], pics[i-1], pics[i])
-    results = get_results(score, cost_matrix)
+for i in range(0, r):
+    if i == 0:
+        res = ''
+        for j in range(0,len(bboxes[i]['boxes'])):
+            res += "-1 "
+        print(res)
+    else:
+        score, cost_matrix = calc_score(bboxes[i-1], bboxes[i], pics[i-1], pics[i])
+        results = get_results(score, cost_matrix)
 
