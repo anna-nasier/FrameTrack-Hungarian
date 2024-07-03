@@ -1,4 +1,27 @@
-# SIwR-projekt
+# Tracking people on security camera between frames using the Hungarian Method
+
+## Assignment Problem Solution
+
+The assignment of detected objects between frames was performed using a graph-solving algorithm - the Hungarian Method. This method is implemented in the code using the linear_sum_assignment function from the scipy library.
+
+## Scoring Determination for the Graph
+
+To determine the scoring that indicates the similarity between detected objects in the image, the following information available in the input data was used:
+
+  - The distance between detected objects
+  - The color histogram within the ROI defined by the coordinates of the bounding box surrounding the object
+  - The object's height relative to the height of the image
+
+These parameters were compared for all objects from two consecutive frames and summed. The parameter values were transformed to indicate the relationship between frames, i.e., for histograms, it is the correlation, and for distance and height, it is the absolute value of the difference. The smaller the score, the higher the probability that the person in the next frame is the same as in the previous one.
+
+## Cost Matrix
+
+The cost matrix has a shape dependent on the number of objects found in the image, where the number of rows equals the number of objects detected in the first frame, and the number of columns equals the number of objects detected in the second frame. Each element of the matrix is the similarity score between a given object from the first frame and the second frame.
+
+However, the function used to compute the graph does not solve certain problems:
+
+  - The number of people in the frames is the same, but they are not the same individuals. To solve this problem, a color histogram correlation parameter was added and a threshold was set above which an object is classified as new.
+  - The number of people in the frames is the same and greater than 2. In such a situation, the Hungarian method may return an object that does not have the smallest score due to the matrix's dimension and the need to unmark columns and rows. Here, the solution was to artificially add an extra row to the matrix, which cannot pass the limiting threshold.
 
 ## Rozwiązanie problemu przypisania
 
